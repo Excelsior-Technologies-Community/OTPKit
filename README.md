@@ -29,7 +29,7 @@ This package is designed to be:
 3. Paste your repository URL:
 
    ```
-   https://github.com/your-username/OTPKit
+   https://github.com/Excelsior-Technologies-Community/OTPKit
    ```
 4. Select the latest version
 5. Add **OTPKit** to your target
