@@ -2,14 +2,7 @@
 
 OTPKit is a lightweight SwiftUI package that provides a **stable, reusable OTP (One-Time Password) input view**.
 It supports **4-digit / 6-digit OTP**, numeric input only, SMS auto-fill support, and gives developers **direct access to the entered OTP value** using `@State` and `@Binding`.
-
-This package is designed to be:
-
-* Simple to integrate
-* Beginner friendly
-* App Store safe
-* SwiftUI first
-
+ 
 ---
 
 ## Requirements
