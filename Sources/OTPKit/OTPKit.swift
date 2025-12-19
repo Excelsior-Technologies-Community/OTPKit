@@ -1,16 +1,9 @@
-//
-//  OTPView.swift
-//  DeliveryTracking
-//
-//  Created by Noman belim on 19/12/25.
+ //
+//  Created by Noman belim
 //
 
 import Foundation
-import SwiftUI
-
-import SwiftUI
 import Combine
-
 import SwiftUI
 
 public struct OTPView: View {
