@@ -7,12 +7,14 @@ import Foundation
 import SwiftUI
 import Combine
 public struct OTPView: View {
+
     // MARK: - CONFIG
     let length: Int
+    let boxSize: CGFloat
     let activeColor: Color
     let inactiveColor: Color
-    
-    // MARK: - BINDING (This is how the developer gets the value)
+
+    // MARK: - BINDING
     @Binding var otpCode: String
 
     // MARK: - INTERNAL STATE
@@ -21,43 +23,46 @@ public struct OTPView: View {
     public init(
         otpCode: Binding<String>,
         length: Int = 6,
+        boxSize: CGFloat = 48,
         activeColor: Color = .blue,
         inactiveColor: Color = .gray
     ) {
         self._otpCode = otpCode
         self.length = length
+        self.boxSize = boxSize
         self.activeColor = activeColor
         self.inactiveColor = inactiveColor
     }
 
     public var body: some View {
         ZStack {
-            // Hidden TextField to capture input
+
+            // Hidden TextField (same square size)
             TextField("", text: $otpCode)
-                .opacity(0.01)
-                .frame(height: 1)
                 .keyboardType(.numberPad)
-                .textContentType(.oneTimeCode) // Auto-fill from SMS
+                .textContentType(.oneTimeCode)
                 .focused($isFocused)
+                .opacity(0.01)
+                .frame(width: boxSize, height: boxSize)
                 .onChange(of: otpCode) { newValue in
-                    // Clean input: only numbers and max length
                     let filtered = newValue.filter { $0.isNumber }
-                    if filtered.count > length {
-                        otpCode = String(filtered.prefix(length))
-                    } else {
-                        otpCode = filtered
-                    }
+                    otpCode = String(filtered.prefix(length))
                 }
 
             // Visual Boxes
             HStack(spacing: 12) {
                 ForEach(0..<length, id: \.self) { index in
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(getBorderColor(at: index), lineWidth: 2)
-                            .frame(width: 45, height: 55)
-                        
-                        Text(getCharacter(at: index))
+                        RoundedRectangle(cornerRadius: 8) // 👈 square corners
+                            .stroke(
+                                index == otpCode.count && isFocused
+                                    ? activeColor
+                                    : inactiveColor,
+                                lineWidth: 2
+                            )
+                            .frame(width: boxSize, height: boxSize)
+
+                        Text(character(at: index))
                             .font(.title2.bold())
                     }
                     .onTapGesture {
@@ -72,17 +77,9 @@ public struct OTPView: View {
     }
 
     // MARK: - HELPERS
-    private func getBorderColor(at index: Int) -> Color {
-        if index == otpCode.count && isFocused {
-            return activeColor
-        }
-        return inactiveColor
-    }
-
-    private func getCharacter(at index: Int) -> String {
+    private func character(at index: Int) -> String {
         guard index < otpCode.count else { return "" }
-        let startIndex = otpCode.startIndex
-        return String(otpCode[otpCode.index(startIndex, offsetBy: index)])
+        return String(Array(otpCode)[index])
     }
 }
 
