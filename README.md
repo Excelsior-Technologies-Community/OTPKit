@@ -111,6 +111,7 @@ This makes OTPKit very easy to integrate with:
 import SwiftUI
 import OTPKit
 
+
 struct ContentView: View {
 
     // OTP value is stored here
@@ -120,14 +121,6 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 40) {
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Verification Code")
-                    .font(.largeTitle.bold())
-
-                Text("Enter the code sent to your mobile device.")
-                    .foregroundColor(.secondary)
-            }
-
             // OTP INPUT
             OTPView(
                 otpCode: $enteredPassword,
@@ -136,39 +129,26 @@ struct ContentView: View {
             )
 
             Spacer()
-
-            // VERIFY BUTTON
-            Button {
-                isVerifying = true
-
-                // You can access the OTP here
-                print("Entered OTP:", enteredPassword)
-
-                // Simulate verification
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    isVerifying = false
-                }
-            } label: {
-                HStack {
-                    if isVerifying {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Text("Verify and Proceed")
-                            .fontWeight(.semibold)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    enteredPassword.count == 4 ? Color.blue : Color.gray
-                )
-                .foregroundColor(.white)
-                .cornerRadius(12)
-            }
-            .disabled(enteredPassword.count < 4 || isVerifying)
         }
         .padding()
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    hideKeyboard()
+                }
+            }
+        }
+    }
+
+    // MARK: - Keyboard Dismiss
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
     }
 }
 ```

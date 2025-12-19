@@ -1,11 +1,11 @@
- //
+//
+//
 //  Created by Noman belim
 //
 
 import Foundation
-import Combine
 import SwiftUI
-
+import Combine
 public struct OTPView: View {
     // MARK: - CONFIG
     let length: Int
@@ -34,7 +34,8 @@ public struct OTPView: View {
         ZStack {
             // Hidden TextField to capture input
             TextField("", text: $otpCode)
-                .frame(width: 0, height: 0)
+                .opacity(0.01)
+                .frame(height: 1)
                 .keyboardType(.numberPad)
                 .textContentType(.oneTimeCode) // Auto-fill from SMS
                 .focused($isFocused)
